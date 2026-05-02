@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --background: 246 239 225;
-  --foreground: 42 36 56;
-  --accent: 167 139 250;
+  --background: 247 244 234; /* garden cream */
+  --foreground: 75 59 64; /* garden loam */
+  --accent: 192 185 221; /* garden rare (periwinkle) */
 }
 
 .dark {
-  --background: 26 21 48;
-  --foreground: 246 239 225;
-  --accent: 251 191 36;
+  --background: 38 12 69; /* garden night */
+  --foreground: 247 244 234;
+  --accent: 209 138 117; /* garden legendary (peach) */
 }
 
 html {

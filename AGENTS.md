@@ -50,5 +50,5 @@ CI runs all five and fails on any one of them.
 - No paid randomness. Cosmetics only, never random rolls behind a paywall.
 - No streak penalties or shame loops. Bad days are silent.
 - No FOMO timers. Limited-time offers are banned in this product.
-- Idle accumulation is capped (`IDLE_CAP_HOURS` in `lib/spirits/catalog.ts`).
+- Offline crop growth is capped (`OFFLINE_GROWTH_CAP_HOURS` in `lib/garden/catalog.ts`).
 - All copy must be supportive, never parental or guilt-trippy.

@@ -5,15 +5,16 @@ import { Topbar } from '@/components/nav/topbar';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
 import { FocusChart } from '@/components/stats/focus-chart';
 import { StreakBadges } from '@/components/stats/streak-badges';
-import { useRealmStore } from '@/lib/store/realm-store';
+import { useGardenStore } from '@/lib/store/garden-store';
 import { bucketByDay, summarize, thisWeekSessions, todaySessions } from '@/lib/stats/aggregates';
 
 export default function StatsPage() {
-  const hydrate = useRealmStore((s) => s.hydrate);
-  const sessions = useRealmStore((s) => s.sessions);
-  const streak = useRealmStore((s) => s.streak);
-  const badges = useRealmStore((s) => s.badges);
-  const spiritCount = useRealmStore((s) => s.spirits.length);
+  const hydrate = useGardenStore((s) => s.hydrate);
+  const sessions = useGardenStore((s) => s.sessions);
+  const streak = useGardenStore((s) => s.streak);
+  const badges = useGardenStore((s) => s.badges);
+  const inventory = useGardenStore((s) => s.inventory);
+  const planted = useGardenStore((s) => s.plantedCrops);
 
   useEffect(() => {
     hydrate();
@@ -23,14 +24,17 @@ export default function StatsPage() {
   const week = summarize(thisWeekSessions(sessions));
   const lifetime = summarize(sessions);
   const bestDay = bestDayFromBuckets(sessions);
+  const totalHarvested = inventory.reduce((sum, e) => sum + e.count, 0);
 
   return (
     <>
       <Topbar />
       <main className="mx-auto max-w-5xl space-y-6 px-4 py-6">
         <header>
-          <h1 className="text-3xl font-semibold tracking-tight">your stats</h1>
-          <p className="mt-1 text-sm text-realm-ink/70 dark:text-realm-parchment/70">
+          <h1 className="text-3xl font-semibold tracking-tight text-garden-loam dark:text-garden-cream">
+            your stats
+          </h1>
+          <p className="mt-1 text-sm text-garden-loam/70 dark:text-garden-cream/70">
             Just numbers. No leaderboards. No comparison shaming.
           </p>
         </header>
@@ -49,7 +53,7 @@ export default function StatsPage() {
           <StatBlock
             title="all time"
             primary={`${Math.round(lifetime.totalFocusMinutes)} min`}
-            sub={`${lifetime.totalSessions} sessions · ${spiritCount} spirits`}
+            sub={`${lifetime.totalSessions} sessions · ${totalHarvested} harvested · ${planted.length} growing`}
           />
         </div>
 
@@ -90,16 +94,18 @@ export default function StatsPage() {
 function StatBlock({ title, primary, sub }: { title: string; primary: string; sub: string }) {
   return (
     <Card>
-      <div className="text-xs uppercase tracking-widest text-realm-ink/60 dark:text-realm-parchment/60">
+      <div className="text-xs uppercase tracking-widest text-garden-loam/60 dark:text-garden-cream/60">
         {title}
       </div>
-      <div className="mt-2 font-mono text-3xl font-semibold tabular-nums">{primary}</div>
-      <div className="mt-1 text-xs text-realm-ink/60 dark:text-realm-parchment/60">{sub}</div>
+      <div className="mt-2 font-mono text-3xl font-semibold tabular-nums text-garden-loam dark:text-garden-cream">
+        {primary}
+      </div>
+      <div className="mt-1 text-xs text-garden-loam/60 dark:text-garden-cream/60">{sub}</div>
     </Card>
   );
 }
 
-function bestDayFromBuckets(sessions: ReturnType<typeof useRealmStore.getState>['sessions']) {
+function bestDayFromBuckets(sessions: ReturnType<typeof useGardenStore.getState>['sessions']) {
   const buckets = Array.from(bucketByDay(sessions).values());
   if (!buckets.length) return null;
   return buckets.reduce((a, b) => (b.focusedMinutes > a.focusedMinutes ? b : a));

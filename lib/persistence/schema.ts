@@ -1,26 +1,40 @@
 /**
  * Versioned save schema. Bump SCHEMA_VERSION and add a migration when shape changes.
+ *
+ * v2: pivoted from "spirits + resources" to "crops + inventory" farm model.
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const STORAGE_KEY = 'focus-realm:v1';
 
-export type Rarity = 'common' | 'rare' | 'legendary';
+export type CropTier = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
 
-export interface SpiritInstance {
-  /** Stable id for this spirit instance. */
+export type CropSpeciesId =
+  | 'carrot'
+  | 'wheat'
+  | 'strawberry'
+  | 'tomato'
+  | 'pumpkin'
+  | 'sunflower'
+  | 'grape'
+  | 'pineapple';
+
+/** A crop currently growing in a plot. */
+export interface PlantedCrop {
+  /** Stable id for this crop instance. */
   id: string;
-  /** Spirit catalog id (e.g. "timothy-mole"). */
-  speciesId: string;
-  /** Rarity rolled at summon time. */
-  rarity: Rarity;
-  /** Plot index (0-based) on the realm grid. */
+  speciesId: CropSpeciesId;
+  tier: CropTier;
+  /** Plot index (0-based) on the garden grid. */
   plotIndex: number;
-  /** Unix ms when summoned. */
-  summonedAt: number;
-  /** Unix ms when their last idle resource production was harvested. */
-  lastHarvestedAt: number;
-  /** Custom name shown in UI ("Timothy", "Lily" etc). */
-  displayName: string;
+  /** Unix ms when planted. */
+  plantedAt: number;
+}
+
+/** A stack of harvested crops in the inventory. */
+export interface InventoryEntry {
+  speciesId: CropSpeciesId;
+  tier: CropTier;
+  count: number;
 }
 
 export interface SessionRecord {
@@ -31,7 +45,8 @@ export interface SessionRecord {
   /** Seconds actually focused (==durationSec when completed). */
   focusedSec: number;
   completed: boolean;
-  spiritId?: string;
+  /** Number of seeds planted on completion. */
+  seedsPlanted?: number;
 }
 
 export interface BadgeUnlock {
@@ -39,9 +54,11 @@ export interface BadgeUnlock {
     | '7-day-streak'
     | '30-day-streak'
     | '100-day-streak'
-    | 'first-spirit'
+    | 'first-harvest'
     | 'first-rare'
-    | 'first-legendary';
+    | 'first-epic'
+    | 'first-legendary'
+    | 'first-mythic';
   unlockedAt: number;
 }
 
@@ -49,13 +66,6 @@ export interface StreakState {
   current: number;
   longest: number;
   lastActiveDay: string | null;
-}
-
-export interface ResourceLedger {
-  motes: number;
-  ore: number;
-  herbs: number;
-  artifacts: number;
 }
 
 export interface SettingsState {
@@ -73,23 +83,30 @@ export interface SaveData {
   version: number;
   createdAt: number;
   updatedAt: number;
-  spirits: SpiritInstance[];
+  plantedCrops: PlantedCrop[];
+  inventory: InventoryEntry[];
+  unlockedSpecies: CropSpeciesId[];
+  /** Free in-game currency earned from harvests (NEVER purchasable). */
+  seedlight: number;
   sessions: SessionRecord[];
   streak: StreakState;
   badges: BadgeUnlock[];
-  resources: ResourceLedger;
   settings: SettingsState;
 }
+
+export const DEFAULT_UNLOCKED: CropSpeciesId[] = ['carrot', 'wheat'];
 
 export const defaultSaveData = (): SaveData => ({
   version: SCHEMA_VERSION,
   createdAt: Date.now(),
   updatedAt: Date.now(),
-  spirits: [],
+  plantedCrops: [],
+  inventory: [],
+  unlockedSpecies: [...DEFAULT_UNLOCKED],
+  seedlight: 0,
   sessions: [],
   streak: { current: 0, longest: 0, lastActiveDay: null },
   badges: [],
-  resources: { motes: 0, ore: 0, herbs: 0, artifacts: 0 },
   settings: {
     theme: 'system',
     audioEnabled: true,

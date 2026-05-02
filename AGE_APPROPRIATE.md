@@ -1,6 +1,6 @@
 # Age-Appropriate Design
 
-Focus Realm is designed with young people in mind. Even though we self-attest
+Focus Garden is designed with young people in mind. Even though we self-attest
 to ages 14+, our design choices follow the
 [UK ICO Age Appropriate Design Code (AADC)](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/childrens-information/age-appropriate-design-code/)
 principles wherever they apply.
@@ -19,14 +19,14 @@ principles wherever they apply.
 - **Transparent data controls.** Settings exposes export and reset in one
   tap.
 - **Best interests of the child.** The product's core loop rewards real-world
-  focus, not in-app engagement for its own sake. Idle accumulation is capped
-  at 8 hours so leaving the app is not punished.
+  focus, not in-app engagement for its own sake. Crops never wilt or rot, and
+  offline growth is capped at 8 hours so leaving the app is never punished.
 
 ## Future paid features
 
 When we add a paid layer it will:
 
-- Be cosmetic-only — never affect spirit production rates.
+- Be cosmetic-only — never affect crop yields or upgrade outcomes.
 - Require parental confirmation behind a PIN by default.
 - Offer easy refunds.
 - Show clear, non-disappearing prices (no countdown timers).

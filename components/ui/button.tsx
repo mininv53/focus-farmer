@@ -13,9 +13,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT: Record<Variant, string> = {
   primary:
-    'bg-realm-dusk text-realm-parchment hover:bg-realm-dusk/90 active:bg-realm-dusk/95 focus-visible:ring-realm-dusk',
+    'bg-garden-loam text-garden-cream hover:bg-garden-loam/90 active:bg-garden-loam/95 focus-visible:ring-garden-loam',
   secondary:
-    'bg-realm-parchment text-realm-ink hover:bg-realm-parchment/80 border border-realm-ink/15 focus-visible:ring-realm-dusk',
+    'bg-garden-cream text-garden-loam hover:bg-garden-cream/80 border border-garden-loam/15 focus-visible:ring-garden-loam dark:bg-white/10 dark:text-garden-cream dark:border-white/15',
   ghost: 'bg-transparent text-current hover:bg-black/5 dark:hover:bg-white/5',
   danger: 'bg-red-500 text-white hover:bg-red-600',
 };
@@ -33,7 +33,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           'inline-flex items-center justify-center rounded-lg font-medium transition-colors',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-realm-parchment dark:focus-visible:ring-offset-realm-midnight',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-garden-cream dark:focus-visible:ring-offset-garden-night',
           'disabled:cursor-not-allowed disabled:opacity-50',
           VARIANT[variant],
           SIZE[size],

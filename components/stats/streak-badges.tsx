@@ -6,18 +6,30 @@ const CATALOG: Record<BadgeUnlock['id'], { label: string; description: string; e
   '7-day-streak': { label: '7-day streak', description: 'one week of showing up', emoji: '🌱' },
   '30-day-streak': { label: '30-day streak', description: 'a month of consistency', emoji: '🌳' },
   '100-day-streak': { label: '100-day streak', description: 'rare focus', emoji: '✨' },
-  'first-spirit': { label: 'first spirit', description: 'you summoned your first', emoji: '🪄' },
-  'first-rare': { label: 'first rare', description: 'a rare arrived', emoji: '🔮' },
-  'first-legendary': { label: 'first legendary', description: 'a legend awakens', emoji: '🌌' },
+  'first-harvest': {
+    label: 'first harvest',
+    description: 'your first ripe crop',
+    emoji: '🌾',
+  },
+  'first-rare': { label: 'first rare', description: 'crafted a rare crop', emoji: '🔮' },
+  'first-epic': { label: 'first epic', description: 'crafted an epic crop', emoji: '🌟' },
+  'first-legendary': {
+    label: 'first legendary',
+    description: 'crafted a legendary crop',
+    emoji: '💫',
+  },
+  'first-mythic': { label: 'first mythic', description: 'crafted a mythic crop', emoji: '🌌' },
 };
 
 const ALL_IDS: BadgeUnlock['id'][] = [
-  'first-spirit',
+  'first-harvest',
   '7-day-streak',
   'first-rare',
   '30-day-streak',
-  'first-legendary',
+  'first-epic',
   '100-day-streak',
+  'first-legendary',
+  'first-mythic',
 ];
 
 interface Props {
@@ -27,7 +39,7 @@ interface Props {
 export function StreakBadges({ badges }: Props) {
   const unlocked = new Set(badges.map((b) => b.id));
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {ALL_IDS.map((id) => {
         const info = CATALOG[id];
         const isUnlocked = unlocked.has(id);
@@ -36,8 +48,8 @@ export function StreakBadges({ badges }: Props) {
             key={id}
             className={`rounded-xl border p-3 text-sm ${
               isUnlocked
-                ? 'border-realm-legendary/40 bg-realm-legendary/10 text-realm-ink dark:text-realm-parchment'
-                : 'border-realm-ink/10 bg-black/5 text-realm-ink/40 dark:border-white/10 dark:bg-white/5 dark:text-realm-parchment/40'
+                ? 'border-garden-legendary/40 bg-garden-legendary/10 text-garden-loam dark:text-garden-cream'
+                : 'border-garden-loam/10 bg-black/5 text-garden-loam/40 dark:border-white/10 dark:bg-white/5 dark:text-garden-cream/40'
             }`}
           >
             <div className="text-2xl">{info.emoji}</div>

@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRealmStore } from '@/lib/store/realm-store';
+import { useGardenStore } from '@/lib/store/garden-store';
 
 /**
  * Reads stored theme preference and applies the `dark` class on <html>.
  * Lives in <body> so the document is mounted by the time we run.
  */
 export function ThemeBootstrap() {
-  const hydrate = useRealmStore((s) => s.hydrate);
-  const theme = useRealmStore((s) => s.settings.theme);
+  const hydrate = useGardenStore((s) => s.hydrate);
+  const theme = useGardenStore((s) => s.settings.theme);
 
   useEffect(() => {
     hydrate();

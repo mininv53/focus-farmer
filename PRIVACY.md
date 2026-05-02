@@ -1,7 +1,7 @@
 # Privacy
 
-Focus Realm collects **nothing** about you in the MVP. Your spirits, sessions,
-badges, and settings are stored entirely in your browser's `localStorage`.
+Focus Garden collects **nothing** about you in the MVP. Your crops, inventory,
+sessions, badges, and settings are stored entirely in your browser's `localStorage`.
 They never leave your device.
 
 ## What we don't do
@@ -21,11 +21,11 @@ will publish the change in this file and a release note before turning it on.
 
 The Settings page exposes:
 
-- **Export JSON** — downloads a `focus-realm-YYYY-MM-DD.json` with everything.
-- **Reset realm** — wipes all spirits, sessions, badges, and resources from
-  this browser. There is no undo.
+- **Export JSON** — downloads a `focus-garden-YYYY-MM-DD.json` with everything.
+- **Reset garden** — erases every crop, inventory stack, session, and badge
+  from this browser. There is no undo.
 
 ## Contact
 
-Replace `privacy@focus-realm.app` (placeholder) before launch with a real
+Replace `privacy@focus-garden.app` (placeholder) before launch with a real
 inbox monitored by the team.

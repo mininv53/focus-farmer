@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DURATION_PRESETS, DEFAULT_PRESET_ID } from '@/lib/focus/presets';
 import { useTimerStore } from '@/lib/store/timer-store';
-import { useRealmStore } from '@/lib/store/realm-store';
+import { useGardenStore } from '@/lib/store/garden-store';
 import { sfx } from '@/lib/audio/synth';
 
 export function TimerControls() {
@@ -14,7 +14,7 @@ export function TimerControls() {
   const pause = useTimerStore((s) => s.pause);
   const resume = useTimerStore((s) => s.resume);
   const abort = useTimerStore((s) => s.abort);
-  const audioEnabled = useRealmStore((s) => s.settings.audioEnabled);
+  const audioEnabled = useGardenStore((s) => s.settings.audioEnabled);
 
   const preset = DURATION_PRESETS.find((p) => p.id === presetId) ?? DURATION_PRESETS[2];
 
@@ -30,8 +30,8 @@ export function TimerControls() {
               onClick={() => setPresetId(p.id)}
               className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
                 presetId === p.id
-                  ? 'bg-realm-dusk text-realm-parchment'
-                  : 'border border-realm-ink/15 text-realm-ink hover:bg-black/5 dark:border-white/15 dark:text-realm-parchment dark:hover:bg-white/5'
+                  ? 'bg-garden-loam text-garden-cream'
+                  : 'border border-garden-loam/15 text-garden-loam hover:bg-black/5 dark:border-white/15 dark:text-garden-cream dark:hover:bg-white/5'
               }`}
             >
               {p.label}
@@ -45,7 +45,7 @@ export function TimerControls() {
             if (audioEnabled) sfx.start();
           }}
         >
-          summon a spirit · {preset.label}
+          plant seeds · {preset.label}
         </Button>
       </div>
     );
@@ -62,7 +62,7 @@ export function TimerControls() {
       <Button
         variant="ghost"
         onClick={() => {
-          if (confirm('End this session early? No streak penalty — your realm stays as-is.')) {
+          if (confirm('End this session early? No streak penalty — your garden stays as-is.')) {
             abort();
           }
         }}

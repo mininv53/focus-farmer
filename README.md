@@ -1,10 +1,10 @@
-# Focus Realm
+# Focus Garden
 
-> Your focus summons spirits.
+> Plant focus, harvest crops.
 
-A focus timer that grows a tiny pixel realm. Each completed session summons a
-spirit who lives on your land and gathers resources while you study — a small,
-honest idle layer on top of a real productivity tool.
+A focus timer that grows a tiny pixel garden. Each completed focus session
+plants seeds that ripen on a wall-clock — even if you close the tab. Tap ripe
+crops to harvest, then combine 5-of-a-kind for a chance at rare → mythic.
 
 Built around the **UK ICO Age Appropriate Design Code** for ages 14+. No
 accounts, no ads, no random paid loot boxes, no shame mechanics.
@@ -42,40 +42,48 @@ CI on every push runs lint → typecheck → format check → tests → build.
 **Core loop**
 
 1. Pick a session length (5 / 15 / 25 / 45 minutes).
-2. Press `summon a spirit`. Switch to the tab where you actually study.
-3. When the timer expires, a spirit is summoned and lands on a free plot.
-4. Spirits gather **motes**, **ore**, and **herbs** while you're away (capped
-   at 8 hours so leaving for a week never feels punishing).
-5. Open the realm later, see the loot, summon more.
+2. Press `plant seeds`. Switch to the tab where you actually study.
+3. When the timer ends, **N seeds are planted** in free plots:
+   - 5 min → 1 seed · 15 min → 2 · 25 min → 3 · 45 min → 5
+4. Crops grow on a wall-clock through 4 stages (sprout → bush → bud →
+   ripe). Each stage takes ~45 seconds. Growth keeps going while the tab is
+   closed — capped at 8 hours so leaving for a week is never punishing.
+5. Tap ripe crops to harvest them into your basket, or press
+   **harvest all**.
 
-**Three rarities, weighted by session length**
+**Combine 5 → 1 with weighted RNG**
 
-| Session | common | rare | legendary |
-| ------- | -----: | ---: | --------: |
-| 5 min   |    80% |  18% |        2% |
-| 15 min  |    70% |  25% |        5% |
-| 25 min  |    60% |  30% |       10% |
-| 45 min  |    45% |  38% |       17% |
+Stack five crops of the same species + tier and the **upgrade** button
+unlocks. The roll table:
 
-Legendary species unlock after **10 completed sessions** (gated discovery,
-not paid randomness). Every roll yields _something_ — there is no "lose"
-state.
+| from / outcome | next tier | skip 1 | skip 2 | skip 3 |
+| -------------- | --------: | -----: | -----: | -----: |
+| common → …     |       70% |    22% |     7% |     1% |
+| rare → …       |       70% |    25% |     5% |      — |
+| epic → …       |       70% |    30% |      — |      — |
+| legendary → …  |      100% |      — |      — |      — |
+
+There is no "lose" outcome — the worst result is the next tier up. **No paid
+randomness** anywhere; the dice only roll on free crafting from crops you
+actually grew.
+
+**Seedlight currency** drops from harvests and lets you unlock new species
+in the seed shop. Crops themselves are never purchasable.
 
 **Streaks are positive only.** Missing a day resets the count to 1, but
 already-earned badges stay forever.
-
-**Idle production cap = 8 hours.** Encourages stepping away.
 
 ---
 
 ## Tech
 
 - **Next.js 14** (App Router) + **TypeScript**
-- **Tailwind CSS** with a cozy realm palette
-- **Phaser 3** for the 2.5D pixel realm scene (procedural pixel-art textures
-  baked at runtime — see `lib/game/textures/procedural.ts`)
+- **Tailwind CSS** with a warm garden palette (cream / lavender / peach /
+  grass)
+- **Phaser 3** for the pixel garden scene with wall-clock growth (procedural
+  pixel-art textures baked at runtime — see `lib/game/textures/farm.ts`)
 - **Zustand** + **immer** for state management
-- **LocalStorage** with a versioned schema and migration framework
+- **LocalStorage** with a versioned schema (v2) and migration framework
 - **Recharts** for stats charts
 - **Vitest** + **jsdom** + **@testing-library** for unit tests
 
@@ -90,15 +98,15 @@ post-MVP roadmap (Supabase).
 focus-farmer/
 ├── app/                    # Next.js routes (App Router)
 │   ├── page.tsx            # Landing
-│   ├── play/page.tsx       # Realm + timer
+│   ├── play/page.tsx       # Garden + timer (3-column layout)
 │   ├── stats/page.tsx
 │   ├── settings/page.tsx
 │   ├── privacy/page.tsx
 │   └── age-appropriate/page.tsx
 ├── components/
 │   ├── age-gate/
+│   ├── garden/             # Phaser mount + inventory panel + seed shop
 │   ├── nav/
-│   ├── realm/              # Phaser mount point (dynamic, no SSR)
 │   ├── settings/
 │   ├── stats/
 │   ├── timer/
@@ -107,14 +115,14 @@ focus-farmer/
 │   ├── audio/              # tiny WebAudio synth fallback
 │   ├── focus/              # timer state machine
 │   ├── game/               # Phaser scenes + procedural textures
+│   ├── garden/             # catalog, growth, crafting, seeds, shop
 │   ├── persistence/        # LocalStorage schema + migrations
-│   ├── spirits/            # catalog, RNG, idle accrual
 │   ├── stats/              # day buckets + streak
-│   ├── store/              # Zustand stores
+│   ├── store/              # Zustand stores (garden + timer)
 │   └── utils/
 ├── public/
 │   ├── audio/              # drop optional .mp3 here (see ASSETS.md)
-│   ├── sprites/            # drop optional spirit PNGs (see ASSETS.md)
+│   ├── sprites/            # drop optional crop PNGs (see ASSETS.md)
 │   └── tiles/              # drop optional tile PNGs (see ASSETS.md)
 ├── tests/
 │   └── unit/               # vitest tests
@@ -126,9 +134,9 @@ focus-farmer/
 ## Replacing the placeholder pixel art and audio
 
 The MVP ships with **procedurally generated pixel art** drawn at runtime in
-`lib/game/textures/procedural.ts`. They look basic on purpose — they're meant
-to be replaced. See [`ASSETS.md`](./ASSETS.md) for the exact filenames, sizes,
-and where to drop your own art.
+`lib/game/textures/farm.ts`. They look basic on purpose — they're meant to be
+replaced. See [`ASSETS.md`](./ASSETS.md) for the exact filenames, sizes, and
+where to drop your own art.
 
 Audio is generated by a tiny Web Audio synth in `lib/audio/synth.ts`. To
 replace those with real `.mp3` clips, see [`ASSETS.md`](./ASSETS.md).
@@ -150,9 +158,9 @@ This repo is at **Stage 1** of a 4-stage plan.
 
 | Stage                                  | Scope                                                                                   |
 | -------------------------------------- | --------------------------------------------------------------------------------------- |
-| **1 — Vertical slice MVP** _(this PR)_ | one realm, timer, summon, idle, stats, streak, settings, age gate, privacy + AADC pages |
-| **2 — Core game**                      | NPCs with daily quests, more biomes, free cosmetic shop, cloud sync (Supabase)          |
-| **3 — Monetization & social**          | Stripe + parental PIN, friend codes, async co-op, PWA, mobile polish                    |
+| **1 — Vertical slice MVP** _(this PR)_ | garden, timer, plant/grow/harvest, craft, seedlight shop, stats, streak, settings, AADC |
+| **2 — Core game**                      | NPC quests, more crop species, decorative cosmetics (free), cloud sync (Supabase)       |
+| **3 — Monetization & social**          | Stripe + parental PIN for cosmetic frames, friend codes, async co-op, PWA               |
 | **4 — Live ops**                       | Seasonal cosmetic events, new species, telemetry-driven balancing                       |
 
 ---

@@ -2,37 +2,35 @@
 
 import { useEffect, useRef } from 'react';
 import { useTimerStore } from '@/lib/store/timer-store';
-import { useRealmStore } from '@/lib/store/realm-store';
+import { useGardenStore } from '@/lib/store/garden-store';
 import { isExpired } from '@/lib/focus/timer';
 import { sfx } from '@/lib/audio/synth';
+import type { PlantedCrop } from '@/lib/persistence/schema';
 
-export interface SummonEvent {
-  spiritId: string;
-  speciesId: string;
-  rarity: 'common' | 'rare' | 'legendary';
-  plotIndex: number;
-  displayName: string;
+export interface CompletionEvent {
+  planted: PlantedCrop[];
+  autoHarvested: PlantedCrop[];
 }
 
 export interface TimerEngineCallbacks {
-  onSummon?: (e: SummonEvent) => void;
+  onComplete?: (e: CompletionEvent) => void;
 }
 
 /**
- * Watches the timer; when expired, completes the session and rolls a spirit.
+ * Watches the timer; when expired, completes the session and plants seeds.
  * Should be mounted ONCE per page that owns the timer (the /play page).
  */
 export function useTimerEngine(cb: TimerEngineCallbacks = {}) {
   const timer = useTimerStore((s) => s.timer);
   const markCompleted = useTimerStore((s) => s.markCompleted);
-  const completeSession = useRealmStore((s) => s.completeSession);
-  const recordAbortedSession = useRealmStore((s) => s.recordAbortedSession);
-  const audioEnabled = useRealmStore((s) => s.settings.audioEnabled);
+  const completeSession = useGardenStore((s) => s.completeSession);
+  const recordAbortedSession = useGardenStore((s) => s.recordAbortedSession);
+  const audioEnabled = useGardenStore((s) => s.settings.audioEnabled);
 
-  const onSummonRef = useRef(cb.onSummon);
+  const onCompleteRef = useRef(cb.onComplete);
   useEffect(() => {
-    onSummonRef.current = cb.onSummon;
-  }, [cb.onSummon]);
+    onCompleteRef.current = cb.onComplete;
+  }, [cb.onComplete]);
 
   useEffect(() => {
     if (timer.status !== 'running' && timer.status !== 'paused') return;
@@ -40,18 +38,10 @@ export function useTimerEngine(cb: TimerEngineCallbacks = {}) {
       const now = Date.now();
       if (isExpired(timer, now)) {
         markCompleted();
-        const summoned = completeSession(timer.durationSec, timer.durationSec, now);
+        const outcome = completeSession(timer.durationSec, timer.durationSec, now);
         if (audioEnabled) sfx.complete();
-        if (summoned) {
-          if (audioEnabled) sfx.summon();
-          onSummonRef.current?.({
-            spiritId: summoned.id,
-            speciesId: summoned.speciesId,
-            rarity: summoned.rarity,
-            plotIndex: summoned.plotIndex,
-            displayName: summoned.displayName,
-          });
-        }
+        if (outcome.planted.length > 0 && audioEnabled) sfx.summon();
+        onCompleteRef.current?.(outcome);
       }
     };
     const id = window.setInterval(tick, 500);

@@ -22,9 +22,9 @@ export function TimerOverlay() {
   if (timer.status === 'idle') return null;
 
   return (
-    <div className="rounded-2xl border border-realm-ink/10 bg-white/70 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
+    <div className="rounded-2xl border border-garden-loam/10 bg-white/70 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
       <div className="flex items-baseline justify-between">
-        <span className="text-xs uppercase tracking-widest text-realm-ink/60 dark:text-realm-parchment/60">
+        <span className="text-xs uppercase tracking-widest text-garden-loam/60 dark:text-garden-cream/60">
           {timer.status === 'paused'
             ? 'paused'
             : timer.status === 'completed'
@@ -33,17 +33,17 @@ export function TimerOverlay() {
                 ? 'ended early'
                 : 'focusing'}
         </span>
-        <span className="text-xs text-realm-ink/60 dark:text-realm-parchment/60">
+        <span className="text-xs text-garden-loam/60 dark:text-garden-cream/60">
           {Math.round(elapsed)}/{Math.round(total)} sec
         </span>
       </div>
-      <div className="mt-3 font-mono text-5xl font-semibold tabular-nums">
+      <div className="mt-3 font-mono text-5xl font-semibold tabular-nums text-garden-loam dark:text-garden-cream">
         {formatMMSS(remaining)}
       </div>
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-realm-ink/10 dark:bg-white/10">
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-garden-loam/10 dark:bg-white/10">
         <div
           aria-hidden
-          className="h-full bg-realm-dusk transition-all duration-300 dark:bg-realm-legendary"
+          className="h-full bg-garden-stem transition-all duration-300 dark:bg-garden-legendary"
           style={{ width: `${ratio * 100}%` }}
         />
       </div>

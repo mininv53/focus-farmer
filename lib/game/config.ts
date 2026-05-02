@@ -1,19 +1,19 @@
 import * as Phaser from 'phaser';
-import { RealmScene } from './scenes/realm-scene';
+import { GardenScene } from '@/lib/game/scenes/garden-scene';
 
-export function makePhaserConfig(parent: HTMLElement): Phaser.Types.Core.GameConfig {
+export function makePhaserConfig(parent: HTMLDivElement): Phaser.Types.Core.GameConfig {
   return {
     type: Phaser.AUTO,
     parent,
-    backgroundColor: '#f6efe1',
+    width: 440,
+    height: 360,
+    backgroundColor: '#f7f4ea',
     pixelArt: true,
+    antialias: false,
+    scene: [GardenScene],
     scale: {
-      mode: Phaser.Scale.FIT,
+      mode: Phaser.Scale.NONE,
       autoCenter: Phaser.Scale.CENTER_BOTH,
-      width: 560,
-      height: 320,
     },
-    physics: { default: 'arcade' },
-    scene: [RealmScene],
   };
 }

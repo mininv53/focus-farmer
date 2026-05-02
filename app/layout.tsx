@@ -3,15 +3,15 @@ import './globals.css';
 import { ThemeBootstrap } from '@/components/nav/theme-bootstrap';
 
 export const metadata: Metadata = {
-  title: 'Focus Realm — your focus summons spirits',
+  title: 'Focus Garden — plant focus, harvest crops',
   description:
-    'A focus timer that grows a tiny pixel realm. Real focus summons spirits who keep working while you are away. No shame. No dark patterns.',
-  applicationName: 'Focus Realm',
-  authors: [{ name: 'Focus Realm Team' }],
-  keywords: ['focus', 'pomodoro', 'productivity', 'idle game', 'pixel art', 'study'],
+    'A focus timer that grows a tiny pixel garden. Real focus plants seeds; crops ripen on their own clock; combine 5 of a kind for a chance at rare → mythic. No shame, no dark patterns.',
+  applicationName: 'Focus Garden',
+  authors: [{ name: 'Focus Garden Team' }],
+  keywords: ['focus', 'pomodoro', 'productivity', 'farm game', 'pixel art', 'study'],
   openGraph: {
-    title: 'Focus Realm',
-    description: 'Your focus summons spirits. They work while you study.',
+    title: 'Focus Garden',
+    description: 'Plant focus. Harvest crops. Combine for rare tiers.',
     type: 'website',
   },
   robots: { index: true, follow: true },
@@ -22,8 +22,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f6efe1' },
-    { media: '(prefers-color-scheme: dark)', color: '#1a1530' },
+    { media: '(prefers-color-scheme: light)', color: '#f7f4ea' },
+    { media: '(prefers-color-scheme: dark)', color: '#260c45' },
   ],
 };
 
