@@ -1,1 +1,176 @@
-# Focus Realm
+# Focus Garden
+
+> Plant focus, harvest crops.
+
+A focus timer that grows a tiny pixel garden. Each completed focus session
+plants seeds that ripen on a wall-clock — even if you close the tab. Tap ripe
+crops to harvest, then combine 5-of-a-kind for a chance at rare → mythic.
+
+Built around the **UK ICO Age Appropriate Design Code** for ages 14+. No
+accounts, no ads, no random paid loot boxes, no shame mechanics.
+
+This is a **vertical slice MVP**. See [Roadmap](#roadmap) for what comes next.
+
+---
+
+## Quick start
+
+```bash
+npm install
+npm run dev   # http://localhost:3000
+```
+
+Other scripts:
+
+```bash
+npm run lint            # ESLint (Next config)
+npm run typecheck       # tsc --noEmit
+npm run test            # vitest run (unit tests)
+npm run test:watch      # vitest in watch mode
+npm run format          # prettier write
+npm run format:check    # prettier check (used by CI)
+npm run build           # production build
+npm run start           # serve production build
+```
+
+CI on every push runs lint → typecheck → format check → tests → build.
+
+---
+
+## How the game works
+
+**Core loop**
+
+1. Pick a session length (5 / 15 / 25 / 45 minutes).
+2. Press `plant seeds`. Switch to the tab where you actually study.
+3. When the timer ends, **N seeds are planted** in free plots:
+   - 5 min → 1 seed · 15 min → 2 · 25 min → 3 · 45 min → 5
+4. Crops grow on a wall-clock through 4 stages (sprout → bush → bud →
+   ripe). Each stage takes ~30 seconds. Growth keeps going while the tab is
+   closed — capped at 8 hours so leaving for a week is never punishing.
+5. Tap ripe crops to harvest them into your basket, or press
+   **harvest all**.
+
+**Combine 5 → 1 with weighted RNG**
+
+Stack five crops of the same species + tier and the **upgrade** button
+unlocks. The roll table:
+
+| from / outcome | next tier | skip 1 | skip 2 | skip 3 |
+| -------------- | --------: | -----: | -----: | -----: |
+| common → …     |       70% |    22% |     7% |     1% |
+| rare → …       |       70% |    25% |     5% |      — |
+| epic → …       |       70% |    30% |      — |      — |
+| legendary → …  |      100% |      — |      — |      — |
+
+There is no "lose" outcome — the worst result is the next tier up. **No paid
+randomness** anywhere; the dice only roll on free crafting from crops you
+actually grew.
+
+**Seedlight currency** drops from harvests and lets you unlock new species
+in the seed shop. Crops themselves are never purchasable.
+
+**Streaks are positive only.** Missing a day resets the count to 1, but
+already-earned badges stay forever.
+
+---
+
+## Tech
+
+- **Next.js 14** (App Router) + **TypeScript**
+- **Tailwind CSS** with a warm garden palette (cream / lavender / peach /
+  grass)
+- **Three.js** + **react-three-fiber** + **drei** for the 2.5D garden scene
+  with wall-clock growth. Crops are procedural low-poly geometry; replace by
+  dropping `.glb` models into `public/models/` later (see `ASSETS.md`)
+- **GSAP** for smooth growth-stage and harvest animations
+- **Zustand** + **immer** for state management
+- **LocalStorage** with a versioned schema (v2) and migration framework
+- **Recharts** for stats charts
+- **Vitest** + **jsdom** + **@testing-library** for unit tests
+
+There is no backend. Everything lives in the browser. Cloud sync is on the
+post-MVP roadmap (Supabase).
+
+---
+
+## Project layout
+
+```
+focus-farmer/
+├── app/                    # Next.js routes (App Router)
+│   ├── page.tsx            # Landing
+│   ├── play/page.tsx       # Garden + timer (3-column layout)
+│   ├── stats/page.tsx
+│   ├── settings/page.tsx
+│   ├── privacy/page.tsx
+│   └── age-appropriate/page.tsx
+├── components/
+│   ├── age-gate/
+│   ├── garden/             # 3D garden scene + inventory panel + seed shop
+│   ├── nav/
+│   ├── settings/
+│   ├── stats/
+│   ├── timer/
+│   └── ui/                 # primitive Button, Card
+├── lib/
+│   ├── audio/              # tiny WebAudio synth fallback
+│   ├── focus/              # timer state machine
+│   ├── garden/             # catalog, growth, crafting, seeds, shop
+│   ├── persistence/        # LocalStorage schema + migrations
+│   ├── stats/              # day buckets + streak
+│   ├── store/              # Zustand stores (garden + timer)
+│   └── utils/
+├── public/
+│   ├── audio/              # drop optional .mp3 here (see ASSETS.md)
+│   ├── sprites/            # drop optional crop PNGs (see ASSETS.md)
+│   └── tiles/              # drop optional tile PNGs (see ASSETS.md)
+├── tests/
+│   └── unit/               # vitest tests
+└── .github/workflows/ci.yml
+```
+
+---
+
+## Replacing the placeholder pixel art and audio
+
+The MVP ships with **procedurally generated pixel art** drawn at runtime in
+`lib/game/textures/farm.ts`. They look basic on purpose — they're meant to be
+replaced. See [`ASSETS.md`](./ASSETS.md) for the exact filenames, sizes, and
+where to drop your own art.
+
+Audio is generated by a tiny Web Audio synth in `lib/audio/synth.ts`. To
+replace those with real `.mp3` clips, see [`ASSETS.md`](./ASSETS.md).
+
+---
+
+## Privacy and age-appropriate design
+
+- See [`AGE_APPROPRIATE.md`](./AGE_APPROPRIATE.md) for the AADC compliance
+  statement.
+- See [`PRIVACY.md`](./PRIVACY.md) for the privacy policy summary.
+- Both are also rendered as in-app pages at `/age-appropriate` and `/privacy`.
+
+---
+
+## Roadmap
+
+This repo is at **Stage 1** of a 4-stage plan.
+
+| Stage                                  | Scope                                                                                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------- |
+| **1 — Vertical slice MVP** _(this PR)_ | garden, timer, plant/grow/harvest, craft, seedlight shop, stats, streak, settings, AADC |
+| **2 — Core game**                      | NPC quests, more crop species, decorative cosmetics (free), cloud sync (Supabase)       |
+| **3 — Monetization & social**          | Stripe + parental PIN for cosmetic frames, friend codes, async co-op, PWA               |
+| **4 — Live ops**                       | Seasonal cosmetic events, new species, telemetry-driven balancing                       |
+
+---
+
+## Contributing
+
+See [`AGENTS.md`](./AGENTS.md) for repo conventions when working on this
+codebase (with humans or agents).
+
+## License
+
+TBD before public launch.
