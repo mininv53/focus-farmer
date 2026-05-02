@@ -46,7 +46,7 @@ CI on every push runs lint → typecheck → format check → tests → build.
 3. When the timer ends, **N seeds are planted** in free plots:
    - 5 min → 1 seed · 15 min → 2 · 25 min → 3 · 45 min → 5
 4. Crops grow on a wall-clock through 4 stages (sprout → bush → bud →
-   ripe). Each stage takes ~45 seconds. Growth keeps going while the tab is
+   ripe). Each stage takes ~30 seconds. Growth keeps going while the tab is
    closed — capped at 8 hours so leaving for a week is never punishing.
 5. Tap ripe crops to harvest them into your basket, or press
    **harvest all**.
@@ -80,8 +80,10 @@ already-earned badges stay forever.
 - **Next.js 14** (App Router) + **TypeScript**
 - **Tailwind CSS** with a warm garden palette (cream / lavender / peach /
   grass)
-- **Phaser 3** for the pixel garden scene with wall-clock growth (procedural
-  pixel-art textures baked at runtime — see `lib/game/textures/farm.ts`)
+- **Three.js** + **react-three-fiber** + **drei** for the 2.5D garden scene
+  with wall-clock growth. Crops are procedural low-poly geometry; replace by
+  dropping `.glb` models into `public/models/` later (see `ASSETS.md`)
+- **GSAP** for smooth growth-stage and harvest animations
 - **Zustand** + **immer** for state management
 - **LocalStorage** with a versioned schema (v2) and migration framework
 - **Recharts** for stats charts
@@ -105,7 +107,7 @@ focus-farmer/
 │   └── age-appropriate/page.tsx
 ├── components/
 │   ├── age-gate/
-│   ├── garden/             # Phaser mount + inventory panel + seed shop
+│   ├── garden/             # 3D garden scene + inventory panel + seed shop
 │   ├── nav/
 │   ├── settings/
 │   ├── stats/
@@ -114,7 +116,6 @@ focus-farmer/
 ├── lib/
 │   ├── audio/              # tiny WebAudio synth fallback
 │   ├── focus/              # timer state machine
-│   ├── game/               # Phaser scenes + procedural textures
 │   ├── garden/             # catalog, growth, crafting, seeds, shop
 │   ├── persistence/        # LocalStorage schema + migrations
 │   ├── stats/              # day buckets + streak

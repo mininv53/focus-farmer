@@ -31,13 +31,13 @@ CI runs all five and fails on any one of them.
 - Use the existing `cn()` helper for conditional classes; do not inline `clsx`.
 - Prefer Tailwind tokens defined in `tailwind.config.ts` over arbitrary hex.
 - New persistent state must be added to `lib/persistence/schema.ts` with a corresponding migration.
-- Phaser scenes never directly read the Zustand stores. Components own the bridge: subscribe in React, push into the scene via methods.
+- Three.js / r3f scenes never directly read the Zustand stores from inside `useFrame`/animation loops in a way that re-renders every tick. Subscribe at the React layer and push the latest values down via props.
 
 ## Tests
 
 - Unit tests live in `tests/unit/` and run in `jsdom`.
 - Test pure functions, RNG (with injected `rng`), and store reducers.
-- Do not write tests that mount Phaser — keep that for Playwright in stage 2+.
+- Do not write tests that mount the Three.js canvas — keep that for Playwright in stage 2+.
 
 ## Branch / PR conventions
 

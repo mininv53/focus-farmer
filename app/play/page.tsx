@@ -16,13 +16,12 @@ import { TIER_LABEL, getSpecies } from '@/lib/garden/catalog';
 import { partitionByMaturity } from '@/lib/garden/growth';
 import type { CropTier } from '@/lib/persistence/schema';
 
-const GardenCanvas = dynamic(
-  () => import('@/components/garden/garden-canvas').then((m) => m.GardenCanvas),
-  {
-    ssr: false,
-    loading: () => <div className="aspect-[11/9] animate-pulse rounded-2xl bg-garden-loam/10" />,
-  },
-);
+const Garden3D = dynamic(() => import('@/components/garden/garden-3d').then((m) => m.Garden3D), {
+  ssr: false,
+  loading: () => (
+    <div className="aspect-[5/4] w-full animate-pulse rounded-2xl bg-garden-loam/10" />
+  ),
+});
 
 interface Toast {
   id: number;
@@ -95,8 +94,8 @@ export default function PlayPage() {
     <>
       <Topbar />
       <AgeGate />
-      <main className="mx-auto max-w-6xl px-4 py-6">
-        <div className="grid gap-6 lg:grid-cols-[280px_1fr_320px]">
+      <main className="mx-auto max-w-[1400px] px-4 py-6">
+        <div className="grid gap-6 lg:grid-cols-[260px_1fr_300px]">
           {/* LEFT: timer */}
           <aside className="space-y-4">
             <TimerOverlay />
@@ -113,7 +112,7 @@ export default function PlayPage() {
 
           {/* CENTER: garden + summary */}
           <section className="space-y-4">
-            <GardenCanvas />
+            <Garden3D />
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-garden-loam/15 bg-garden-cream/60 p-3 text-sm dark:border-white/10 dark:bg-white/5">
               <div>
                 {mature.length > 0 ? (

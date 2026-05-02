@@ -10,7 +10,7 @@ export const GARDEN_CAPACITY = GARDEN_COLS * GARDEN_ROWS;
 export const OFFLINE_GROWTH_CAP_HOURS = 8;
 
 /** Seconds per growth stage. 4 stages → fully mature in (4 * STAGE_SECONDS) seconds. */
-export const STAGE_SECONDS = 45;
+export const STAGE_SECONDS = 30;
 /** Total stages a crop transitions through. 0..STAGE_COUNT-1 are growing, STAGE_COUNT means mature. */
 export const STAGE_COUNT = 4;
 

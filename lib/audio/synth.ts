@@ -1,7 +1,7 @@
 /**
  * Tiny browser-only audio synthesizer used for SFX when no audio assets are
- * provided. If `/audio/<name>.mp3` exists in /public it could be loaded via
- * Phaser separately; this module is a fallback for the React UI only.
+ * provided. If `/audio/<name>.mp3` exists in /public, the React UI can load
+ * it directly with `new Audio()`; this module is a synthesised fallback.
  */
 
 let ctx: AudioContext | null = null;
