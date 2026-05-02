@@ -45,10 +45,10 @@ animation in `lib/game/scenes/garden-scene.ts`.
 
 Drop into `public/tiles/`.
 
-| Filename                      | Size  | Description                                              |
-| ----------------------------- | ----- | -------------------------------------------------------- |
-| `public/tiles/field.png`      | 32×32 | Seamless grass field tile (replaces `tile-field`).       |
-| `public/tiles/soil.png`       | 32×32 | Plot with planted soil (replaces `tile-soil`).           |
+| Filename                      | Size  | Description                                                 |
+| ----------------------------- | ----- | ----------------------------------------------------------- |
+| `public/tiles/field.png`      | 32×32 | Seamless grass field tile (replaces `tile-field`).          |
+| `public/tiles/soil.png`       | 32×32 | Plot with planted soil (replaces `tile-soil`).              |
 | `public/tiles/empty-plot.png` | 32×32 | Empty plot with planter frame (replaces `tile-empty-plot`). |
 
 ## Audio
